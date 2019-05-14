@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Route, NavLink, BrowserRouter as Router, Switch } from 'react-router-dom';
 import NewPost from '../Posts/NewPost';
 import PostList from '../Posts/PostList';
 import Main from './Main';
@@ -11,13 +11,13 @@ export default class Layout extends React.Component{
             <Router>
                 <ul>
                     <li>
-                    <Link to="/">Home</Link>
+                        <NavLink to="/" activeClassName="active">Home</NavLink>
                     </li>
                     <li>
-                    <Link to="/posts">Posts</Link>
+                        <NavLink to="/posts" activeClassName="active">Posts</NavLink>
                     </li>
                     <li>
-                    <Link to="/post/add">New Post</Link>
+                        <NavLink to="/post/add" activeClassName="active">New Post</NavLink>
                     </li>
                 </ul>
                 <div className="container">
