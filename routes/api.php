@@ -16,11 +16,12 @@ use Illuminate\Http\Request;
 
 Route::any('/register', 'Api\AuthController@register');
 Route::any('/login', 'Api\AuthController@login')->name('login');
+Route::resource('/users', 'Api\UserController');
 
 Route::group(['middleware' => 'auth:api', 'namespace' => 'Api', ], function (){
     Route::any('/me', 'AuthController@me');
     Route::any('/refresh', 'AuthController@refresh');
     Route::any('/logout', 'AuthController@logout');
 
-    Route::resource('/users', 'UserController');
+    // Route::resource('/users', 'UserController');
 });

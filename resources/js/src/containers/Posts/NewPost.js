@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createPost } from '../../actions';
 
 class NewPost extends React.Component {
   constructor(props) {
     super(props);
   
     this.state = {
-      title: '',
-      body: ''
+      post: {
+        title: '',
+        body: ''
+      }
     }
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -17,27 +18,32 @@ class NewPost extends React.Component {
   }
 
   handleInputChange (e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
+    let post = this.state.post;
+    post[e.target.name] = e.target.value;
+    this.setState({post});
   };
 
   handleSubmit(e) {
     e.preventDefault();
-    if (this.state.title.trim() && this.state.body.trim()) {
-      this.props.onAddPost(this.state);
+    let post = this.state.post;
+    if (post.title.trim() && post.body.trim()) {
+      // this.props.onAddPost(post);
       this.handleReset();
+      this.props.history.push('/posts')
     }
   };
 
   handleReset() {
     this.setState({
-      title: '',
-      body: ''
+      post: {
+        title: '',
+        body: ''
+      }
     });
   };
 
   render() {
+    const {post} = this.state;
     return (
       <div>
           <form onSubmit={ this.handleSubmit }>
@@ -48,7 +54,7 @@ class NewPost extends React.Component {
                 className="form-control"
                 name="title"
                 onChange={ this.handleInputChange }
-                value={ this.state.title }
+                value={ post.title }
               />
             </div>
             <div className="form-group">
@@ -59,7 +65,7 @@ class NewPost extends React.Component {
                 className="form-control"
                 name="body"
                 onChange={ this.handleInputChange }
-                value={ this.state.body }>
+                value={ post.body }>
               </textarea>
             </div>
             <div className="form-group">
@@ -68,7 +74,7 @@ class NewPost extends React.Component {
                 Reset
               </button>
             </div>
-        </form>
+          </form>
       </div>
     );
   }
@@ -77,7 +83,7 @@ class NewPost extends React.Component {
 const mapDispatchToProps = dispatch => {
   return {
     onAddPost: post => {
-      dispatch(createPost(post));
+      // dispatch(createPost(post));
     }
   };
 };

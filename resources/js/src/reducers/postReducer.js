@@ -1,12 +1,36 @@
-import { ADD_POST, DELETE_POST } from '../actions/types';
+import {LOAD_POSTS_ERROR, LOAD_POSTS_LOADING, LOAD_POSTS_SUCCESS} from "../actions/Post";
 
-export default function postReducer(state = [], action) {
-  switch (action.type) {
-    case ADD_POST:
-      return [...state, action.payload];
-    case DELETE_POST:
-      return state.filter(post => post.id !== action.payload.id);
-    default:
-      return state;
-  }
-}
+export const initialState = {
+    posts: [],
+    loading: false,
+    error: ''
+};
+
+export function postReducer(state = initialState, action) {
+    switch (action.type) {
+        case LOAD_POSTS_LOADING: {
+            return {
+                ...state,
+                loading: true,
+                error:''
+            };
+        }
+        case LOAD_POSTS_SUCCESS: {
+            return {
+                ...state,
+                posts: action.posts,
+                loading: false
+            }
+        }
+        case LOAD_POSTS_ERROR: {
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            };
+        }
+        default: {
+            return state;
+        }
+    }
+};
