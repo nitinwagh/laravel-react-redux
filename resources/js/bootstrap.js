@@ -24,7 +24,7 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-window.apiUrl = "http://10.46.1.91:8000/api";
+window.apiUrl = "http://127.0.0.1:8000/api";
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
