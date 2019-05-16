@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { loginUser } from '../../actions/Auth';
+import { loginUser, setToken } from '../../actions/Auth';
 import { PropTypes } from 'prop-types';
-import { setToken } from '../../services/token';
 
 class Login extends React.Component {
   constructor(props) {
@@ -10,7 +9,8 @@ class Login extends React.Component {
   
     this.state = {
         email: '',
-        password: ''
+        password: '',
+        token_details: {},
     }
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -34,8 +34,8 @@ class Login extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (!this.props.loading) {
-      this.props.setToken(this.props.token_details);
+    if (prevProps.token_details != this.props.token_details) {
+      setToken(this.props.token_details);
     }
   }
 
@@ -102,7 +102,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         loginUser: (data) => dispatch(loginUser(data)),
-        setToken: (data) => setToken(data)
     };
 }
 

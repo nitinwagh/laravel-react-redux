@@ -71587,7 +71587,7 @@ if (token) {
 /*!******************************************!*\
   !*** ./resources/js/src/actions/Auth.js ***!
   \******************************************/
-/*! exports provided: REGISTER_USER, REGISTER_USER_SUCCESS, REGISTER_USER_ERROR, LOGIN_USER, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, saveUser, loginUser */
+/*! exports provided: REGISTER_USER, REGISTER_USER_SUCCESS, REGISTER_USER_ERROR, LOGIN_USER, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR, saveUser, loginUser, setToken */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -71600,6 +71600,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_USER_ERROR", function() { return LOGIN_USER_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "saveUser", function() { return saveUser; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loginUser", function() { return loginUser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setToken", function() { return setToken; });
 var REGISTER_USER = 'REGISTER_USER';
 var REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
 var REGISTER_USER_ERROR = 'REGISTER_USER_ERROR';
@@ -71618,6 +71619,12 @@ var loginUser = function loginUser(data) {
     data: data
   };
 };
+function setToken(token_details) {
+  localStorage.setItem('token', token_details.access_token);
+  localStorage.setItem('expires_in', token_details.expires_in);
+  localStorage.setItem('token_type', token_details.token_type);
+  return true;
+}
 
 /***/ }),
 
@@ -72009,7 +72016,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_Auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../actions/Auth */ "./resources/js/src/actions/Auth.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _services_token__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/token */ "./resources/js/src/services/token.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -72035,7 +72041,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-
 var Login =
 /*#__PURE__*/
 function (_React$Component) {
@@ -72049,7 +72054,8 @@ function (_React$Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Login).call(this, props));
     _this.state = {
       email: '',
-      password: ''
+      password: '',
+      token_details: {}
     };
     _this.handleInputChange = _this.handleInputChange.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
@@ -72078,8 +72084,8 @@ function (_React$Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps) {
-      if (!this.props.loading) {
-        this.props.setToken(this.props.token_details);
+      if (prevProps.token_details != this.props.token_details) {
+        Object(_actions_Auth__WEBPACK_IMPORTED_MODULE_2__["setToken"])(this.props.token_details);
       }
     }
   }, {
@@ -72151,9 +72157,6 @@ function mapDispatchToProps(dispatch) {
   return {
     loginUser: function loginUser(data) {
       return dispatch(Object(_actions_Auth__WEBPACK_IMPORTED_MODULE_2__["loginUser"])(data));
-    },
-    setToken: function setToken(data) {
-      return Object(_services_token__WEBPACK_IMPORTED_MODULE_4__["setToken"])(data);
     }
   };
 }
@@ -72242,6 +72245,13 @@ function (_React$Component) {
   }
 
   _createClass(Register, [{
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps) {
+      if (prevProps.token_details != this.props.token_details) {
+        Object(_actions_Auth__WEBPACK_IMPORTED_MODULE_2__["setToken"])(this.props.token_details);
+      }
+    }
+  }, {
     key: "handleInputChange",
     value: function handleInputChange(e) {
       this.setState(_defineProperty({}, e.target.name, e.target.value));
@@ -72250,10 +72260,10 @@ function (_React$Component) {
     key: "handleSubmit",
     value: function handleSubmit(e) {
       e.preventDefault();
-      var _this$state$password = this.state.password,
-          name = _this$state$password.name,
-          email = _this$state$password.email,
-          password = _this$state$password.password;
+      var _this$state = this.state,
+          name = _this$state.name,
+          email = _this$state.email,
+          password = _this$state.password;
       var data = {
         name: name,
         email: email,
@@ -72271,10 +72281,10 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this$state = this.state,
-          name = _this$state.name,
-          email = _this$state.email,
-          password = _this$state.password;
+      var _this$state2 = this.state,
+          name = _this$state2.name,
+          email = _this$state2.email,
+          password = _this$state2.password;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "SignUp Form"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -72763,11 +72773,35 @@ function userReducer() {
         });
       }
 
+    case _actions_Auth__WEBPACK_IMPORTED_MODULE_0__["LOGIN_USER"]:
+      {
+        return _objectSpread({}, state, {
+          loading: true,
+          error: ''
+        });
+      }
+
     case _actions_Auth__WEBPACK_IMPORTED_MODULE_0__["REGISTER_USER_SUCCESS"]:
       {
         return _objectSpread({}, state, {
           token_details: action.token_details,
           loading: false
+        });
+      }
+
+    case _actions_Auth__WEBPACK_IMPORTED_MODULE_0__["LOGIN_USER_SUCCESS"]:
+      {
+        return _objectSpread({}, state, {
+          token_details: action.token_details,
+          loading: false
+        });
+      }
+
+    case _actions_Auth__WEBPACK_IMPORTED_MODULE_0__["LOGIN_USER_ERROR"]:
+      {
+        return _objectSpread({}, state, {
+          loading: false,
+          error: action.error
         });
       }
 
@@ -73197,25 +73231,6 @@ function rootSaga() {
       }
     }
   }, _marked);
-}
-
-/***/ }),
-
-/***/ "./resources/js/src/services/token.js":
-/*!********************************************!*\
-  !*** ./resources/js/src/services/token.js ***!
-  \********************************************/
-/*! exports provided: setToken */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setToken", function() { return setToken; });
-function setToken(token_details) {
-  localStorage.setItem('token', token_details.access_token);
-  localStorage.setItem('expires_in', token_details.expires_in);
-  localStorage.setItem('token_type', token_details.token_type);
-  return true;
 }
 
 /***/ }),
