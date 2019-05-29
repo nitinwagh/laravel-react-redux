@@ -30,7 +30,6 @@ class PostList extends React.Component {
     const { loading } = this.props;
     const onDelete = this.props.onDelete;
     const { posts } = this.state;
-    console.log('posts => ', posts);
     return (
       <div>
         <h1>Posts List</h1>

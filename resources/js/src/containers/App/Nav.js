@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Nav = () => {
+const Nav = (props) => {
     return (
         <div>
             <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -29,10 +29,11 @@ const Nav = () => {
                 </ul>
                 <ul className="navbar-nav pull-right">
                     <li className="nav-item">
+                    {props.isAuthenticated ? (
                         <NavLink className="nav-link" to="/login" activeClassName="active">Login</NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink className="nav-link" to="/logout" activeClassName="active">Logout</NavLink>
+                    ) : ( 
+                        <a href="#" className="nav-link" onClick={() => props.logout()}>Logout</a> 
+                    )}
                     </li>
                     <li className="nav-item">
                         <NavLink className="nav-link" to="/register" activeClassName="active">SignUp</NavLink>

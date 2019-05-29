@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { loginUser, setToken } from '../../actions/Auth';
+import { loginUser } from '../../actions/Auth';
 import { PropTypes } from 'prop-types';
 
 class Login extends React.Component {
@@ -35,7 +35,7 @@ class Login extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.token_details != this.props.token_details) {
-      setToken(this.props.token_details);
+      this.props.history.push('/');
     }
   }
 

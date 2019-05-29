@@ -26,6 +26,7 @@ export function postReducer(state = initialState, action) {
             return {
                 ...state,
                 loading: false,
+                posts: [],
                 error: action.error
             };
         }

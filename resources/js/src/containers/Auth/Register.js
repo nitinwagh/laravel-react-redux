@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { saveUser, setToken } from '../../actions/Auth';
+import { saveUser } from '../../actions/Auth';
 import { PropTypes } from 'prop-types';
 
 class Register extends React.Component {
@@ -20,7 +20,7 @@ class Register extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.token_details != this.props.token_details) {
-      setToken(this.props.token_details);
+      // setToken(this.props.token_details);
     }
   }
 
